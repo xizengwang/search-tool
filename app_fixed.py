@@ -149,7 +149,7 @@ key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRl
 supabase: Client = create_client(url, key)
 
 @st.cache_data(ttl=1800)
-def load_supabase_data_paged(max_pages=100, page_size=5000):
+def load_supabase_data_paged(max_pages=30, page_size=5000):
     all_data = []
     for i in range(max_pages):
         start = i * page_size
