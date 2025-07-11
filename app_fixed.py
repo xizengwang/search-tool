@@ -19,13 +19,13 @@ def parse_keywords(text):
         return []
     return [normalize(x) for x in str(text).split("/") if x.strip()]
 
-def load_term_library(path="data/term_library.xlsx"):
+def load_term_library(path="term_library.xlsx"):
     df = pd.read_excel(path)
     df.columns = df.columns.str.strip()
     term_dict = {row["分类标签"]: parse_keywords(row["对应词"]) for _, row in df.iterrows()}
     return term_dict, df
 
-def load_spu_rules(path="data/spu_rules.xlsx"):
+def load_spu_rules(path="spu_rules.xlsx"):
     df = pd.read_excel(path)
     df.columns = df.columns.str.strip()
     return df
@@ -190,10 +190,10 @@ st.title("📊 搜索词分类表现分析工具")
 
 with st.spinner("从 Supabase 分页加载搜索词数据..."):
     df = load_supabase_data_paged(max_pages=100, page_size=5000)  # 最多加载 50 万条
-    mapping_df = pd.read_excel("data/sku_mapping.xlsx").rename(str.strip, axis=1)
+    mapping_df = pd.read_excel("sku_mapping.xlsx").rename(str.strip, axis=1)
     mapping_df = mapping_df.drop_duplicates(subset="ASIN")
-    rules_df = load_spu_rules("data/spu_rules.xlsx")
-    term_dict, term_df = load_term_library("data/term_library.xlsx")
+    rules_df = load_spu_rules("spu_rules.xlsx")
+    term_dict, term_df = load_term_library("term_library.xlsx")
     merged = classify_all(df, mapping_df, rules_df, term_dict)
 
 # 🧾 词库维护
@@ -202,7 +202,7 @@ term_df_edit = st.data_editor(term_df, num_rows="dynamic", use_container_width=T
 col1, col2 = st.columns(2)
 with col1:
     if st.button("💾 保存词库"):
-        term_df_edit.to_excel("data/term_library.xlsx", index=False)
+        term_df_edit.to_excel("term_library.xlsx", index=False)
         st.success("已保存！请刷新页面生效。")
 with col2:
     st.download_button("📤 导出词库", term_df_edit.to_csv(index=False).encode("utf-8-sig"), file_name="term_library.csv")
@@ -213,7 +213,7 @@ rules_edit = st.data_editor(rules_df, use_container_width=True, num_rows="dynami
 col3, col4 = st.columns(2)
 with col3:
     if st.button("💾 保存分类规则"):
-        rules_edit.to_excel("data/spu_rules.xlsx", index=False)
+        rules_edit.to_excel("spu_rules.xlsx", index=False)
         st.success("分类规则已保存，请刷新页面加载新规则。")
 with col4:
     st.download_button("📥 下载分类规则", rules_edit.to_csv(index=False).encode("utf-8-sig"), file_name="spu_rules.csv")
