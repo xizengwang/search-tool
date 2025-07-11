@@ -212,8 +212,8 @@ with st.spinner("从 Supabase 分页加载搜索词数据..."):
     df = load_supabase_data_paged(max_pages=100, page_size=5000)  # 最多加载 50 万条
     mapping_df = load_sku_mapping()
     mapping_df = mapping_df.drop_duplicates(subset="ASIN")
-    rules_df = load_spu_rules("spu_rules.xlsx")
-    term_dict, term_df = load_term_library("term_library.xlsx")
+    rules_df = load_spu_rules()
+    term_dict, term_df = load_term_library()
     merged = classify_all(df, mapping_df, rules_df, term_dict)
 
 # 🧾 词库维护
