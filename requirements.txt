@@ -1,0 +1,6 @@
+streamlit
+pandas
+altair
+openpyxl
+inflect
+supabase
