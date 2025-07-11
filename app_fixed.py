@@ -222,8 +222,10 @@ term_df_edit = st.data_editor(term_df, num_rows="dynamic", use_container_width=T
 col1, col2 = st.columns(2)
 with col1:
     if st.button("💾 保存词库"):
-        term_df_edit.to_excel("term_library.xlsx", index=False)
-        st.success("已保存！请刷新页面生效。")
+    data = term_df_edit.to_dict(orient="records")
+    supabase.table("term_library").delete().neq("分类标签", "").execute()  # 清空
+    supabase.table("term_library").insert(data).execute()
+    st.success("已保存到 Supabase！请刷新页面生效。")
 with col2:
     st.download_button("📤 导出词库", term_df_edit.to_csv(index=False).encode("utf-8-sig"), file_name="term_library.csv")
 
@@ -233,8 +235,10 @@ rules_edit = st.data_editor(rules_df, use_container_width=True, num_rows="dynami
 col3, col4 = st.columns(2)
 with col3:
     if st.button("💾 保存分类规则"):
-        rules_edit.to_excel("spu_rules.xlsx", index=False)
-        st.success("分类规则已保存，请刷新页面加载新规则。")
+    data = rules_edit.to_dict(orient="records")
+    supabase.table("spu_rules").delete().neq("SPU", "").execute()  # 清空原表
+    supabase.table("spu_rules").insert(data).execute()
+    st.success("分类规则已保存到 Supabase，请刷新页面加载新规则。")
 with col4:
     st.download_button("📥 下载分类规则", rules_edit.to_csv(index=False).encode("utf-8-sig"), file_name="spu_rules.csv")
 
