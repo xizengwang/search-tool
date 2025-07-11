@@ -161,10 +161,8 @@ def plot_trend_purchase_share(df, title="购买份额趋势图"):
 # 🔌 Supabase连接
 from supabase import create_client, Client
 
-# url = "https://texekgedycnthkeivbtw.supabase.co"
-# key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRleGVrZ2VkeWNudGhrZWl2YnR3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjIxMjU5MCwiZXhwIjoyMDY3Nzg4NTkwfQ.tcTI53XXVt7lt4AdloHHoI89Ig7zFxi50MUqagKq_Oo"
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
+url = "https://texekgedycnthkeivbtw.supabase.co"
+key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRleGVrZ2VkeWNudGhrZWl2YnR3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjIxMjU5MCwiZXhwIjoyMDY3Nzg4NTkwfQ.tcTI53XXVt7lt4AdloHHoI89Ig7zFxi50MUqagKq_Oo"
 supabase: Client = create_client(url, key)
 
 # ✅ 缓存 Supabase 加载
