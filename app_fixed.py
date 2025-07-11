@@ -182,6 +182,26 @@ def load_supabase_data_paged(max_pages=100, page_size=5000):
     df["日期"] = pd.to_datetime(df["日期"], errors='coerce')
     return df
 
+
+def load_sku_mapping():
+    response = supabase.table("sku_mapping").select("*").execute()
+    df = pd.DataFrame(response.data)
+    df.columns = df.columns.str.strip()
+    return df.drop_duplicates(subset="ASIN")
+
+def load_spu_rules():
+    response = supabase.table("spu_rules").select("*").execute()
+    df = pd.DataFrame(response.data)
+    df.columns = df.columns.str.strip()
+    return df
+
+def load_term_library():
+    response = supabase.table("term_library").select("*").execute()
+    df = pd.DataFrame(response.data)
+    df.columns = df.columns.str.strip()
+    term_dict = {row["分类标签"]: parse_keywords(row["对应词"]) for _, row in df.iterrows()}
+    return term_dict, df
+
 # -------------------------
 # 页面布局
 # -------------------------
@@ -190,7 +210,7 @@ st.title("📊 搜索词分类表现分析工具")
 
 with st.spinner("从 Supabase 分页加载搜索词数据..."):
     df = load_supabase_data_paged(max_pages=100, page_size=5000)  # 最多加载 50 万条
-    mapping_df = pd.read_excel("sku_mapping.xlsx").rename(str.strip, axis=1)
+    mapping_df = load_sku_mapping()
     mapping_df = mapping_df.drop_duplicates(subset="ASIN")
     rules_df = load_spu_rules("spu_rules.xlsx")
     term_dict, term_df = load_term_library("term_library.xlsx")
