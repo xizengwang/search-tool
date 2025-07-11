@@ -19,16 +19,6 @@ def parse_keywords(text):
         return []
     return [normalize(x) for x in str(text).split("/") if x.strip()]
 
-def load_term_library(path="term_library.xlsx"):
-    df = pd.read_excel(path)
-    df.columns = df.columns.str.strip()
-    term_dict = {row["分类标签"]: parse_keywords(row["对应词"]) for _, row in df.iterrows()}
-    return term_dict, df
-
-def load_spu_rules(path="spu_rules.xlsx"):
-    df = pd.read_excel(path)
-    df.columns = df.columns.str.strip()
-    return df
 
 def expand_keyword_group(group, term_dict):
     parts = group.split("+")
